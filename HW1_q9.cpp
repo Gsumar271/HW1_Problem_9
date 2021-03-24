@@ -197,7 +197,11 @@ int main(){
     char c;
     //a variable that defines the length of the sequence
     int kSize;
+    
+    //set the size of the sequence
     kSize = 8;
+    // kSize = 10;
+    // kSize = 12;
 
     // initialize random seed: 
     srand(time(NULL));
