@@ -1,3 +1,7 @@
+/*
+By Yevgeniy Sumaryev
+3/20/21
+*/
 #include <iostream>
 #include <vector>
 #include <string>
@@ -19,7 +23,7 @@ void mutateDeBrujinArray(vector<char>* sequence);
 string getSubsequenceList(list<char>* sequence, int from, int length);
 void mutateDeBrujinList(list<char>* sequence);
 
-//a driver function which checks for de Brujin sequence 
+//a function which checks for de Brujin sequence 
 bool checkIfdeBrujinArray(vector<char>* sequence, int length){
     //size of sequence
     int seqSize;
@@ -49,8 +53,8 @@ bool checkIfdeBrujinArray(vector<char>* sequence, int length){
     return true;
 }
 
-//function to get the subsequence of the main character sequence
-//function arguments are sequence, starting position and size of subsequence
+//function to get the subsequence of the main character sequence.
+//function arguments are the main sequence, starting position and size of subsequence
 string getSubsequenceArray(vector<char>* sequence, int from, int length){
     string sub = "";
 
@@ -66,7 +70,7 @@ string getSubsequenceArray(vector<char>* sequence, int from, int length){
     return sub;
 }
 
-
+//function to mutate the sequence
 void mutateDeBrujinArray(vector<char>* sequence){
     //size of sequence
     int seqSize;
@@ -92,6 +96,7 @@ void mutateDeBrujinArray(vector<char>* sequence){
     }
 }
 
+//function which uses list to check for de Brujin sequence
 bool checkIfdeBrujinList(list<char>* sequence, int length){
 
     string subSequence;
@@ -120,7 +125,7 @@ bool checkIfdeBrujinList(list<char>* sequence, int length){
     return true;
 }
 
-
+//helper function to get the subsequence
 string getSubsequenceList(list<char>* sequence, int from, int length){
     string sub = "";
     char c;
@@ -148,6 +153,7 @@ string getSubsequenceList(list<char>* sequence, int from, int length){
     return sub;
 }
 
+//mutate the sequence using list
 void mutateDeBrujinList(list<char>* sequence){
     
     //size of sequence
@@ -177,5 +183,114 @@ void mutateDeBrujinList(list<char>* sequence){
             }   
         }
     }
+
+}
+
+
+int main(){
+    vector<char> vString; 
+    list<char> vList;
+    int randNum;
+    //empty to string to convert from integer
+    string numberString = "";
+    //char variable needed for int to char conversion
+    char c;
+    //a variable that defines the length of the sequence
+    int kSize;
+    kSize = 8;
+
+    // initialize random seed: 
+    srand(time(NULL));
+
+    //create random array of 0 and 1 characters
+    for (int i = 0; i < kSize; i++)
+    {
+        randNum = rand() % 2;
+        // c = randNum + '0';
+        // numberString = numberString + c;
+        vString.push_back(randNum + '0');
+    }
+
+    //print array sequence
+    cout<< "Array: "<<endl;
+    for (int j = 0; j < kSize; j++)
+    {
+        cout<< vString[j] << " ";
+        
+    }
+    cout << endl;
+
+
+    //create random list of 0 and 1 characters
+    for (int i = 0; i < kSize; i++)
+    {
+        randNum = rand() % 2;
+        vList.push_back(randNum + '0');
+    }
+
+    // using iterator to print list
+    cout<<"List: "<<endl;
+    for (auto it = vList.begin(); it !=vList.end(); ++it)
+        cout<< *it <<' ';
+    cout << endl;
+
+    //time the array structure 
+    int counter = 0;
+    bool stop = false;
+    cout<<"Using Array to test: "<<endl;
+
+    //variable to time the function
+    auto start = chrono::system_clock::now();
+    while(counter < 100 && !stop) {
+        if(!checkIfdeBrujinArray(&vString, 3)){
+            mutateDeBrujinArray(&vString);
+            cout << "Not deBrujin sequence" << endl;
+            for (int j = 0; j < 8; j++)
+                {
+                    cout << vString[j] << " ";
+        
+                }
+            cout << endl;
+            counter++;
+         }
+         else
+         {
+             cout << "Found deBrujin sequence with array" << endl;
+             stop = true;
+         } 
+    }
+    auto end = chrono::system_clock::now();
+    chrono::duration<double> elapsed_seconds_array = end-start;
+
+    
+    //time the linked list structure 
+    counter = 0;
+    stop = false;
+    cout<<endl;
+    cout<<"Using a list to test: "<<endl;
+    //variable to time the function
+    start = chrono::system_clock::now();
+    while(counter < 100 && !stop) {
+        if(!checkIfdeBrujinList(&vList, 3)){
+            mutateDeBrujinList(&vList);
+            cout << "Not deBrujin sequence" << endl;
+            for (auto it = vList.begin(); it !=vList.end(); ++it)
+                cout<< *it <<' ';
+            cout << endl;
+            counter++;
+         }
+         else
+         {
+             cout << "Found deBrujin sequence with a list" << endl;
+             stop = true;
+         } 
+    }
+    end = chrono::system_clock::now();
+    chrono::duration<double> elapsed_seconds_list = end-start;
+
+    cout << endl;
+    cout << "Array elapsed time: " << elapsed_seconds_array.count() << "s\n";
+    cout << "List elapsed time: " << elapsed_seconds_list.count() << "s\n";
+    cout << endl;
 
 }
